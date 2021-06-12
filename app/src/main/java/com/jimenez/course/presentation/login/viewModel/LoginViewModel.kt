@@ -6,6 +6,7 @@ import com.jimenez.course.presentation.core.base.BaseViewModel
 class LoginViewModel: BaseViewModel() {
 
     // TODO: 12/06/21 Código de prueba
+    // FIXME: 12/06/21 change
     var titleViewModel = ObservableField("")
     val time = 10
 
