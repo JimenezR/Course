@@ -1,5 +1,7 @@
 package com.jimenez.course.presentation.login.view
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +17,7 @@ import com.jimenez.course.presentation.core.base.BaseFragment
 import com.jimenez.course.presentation.core.callbacks.ResultCallback
 import com.jimenez.course.presentation.login.viewModel.LoginViewModel
 import com.jimenez.course.presentation.login.viewModel.LoginViewModelFactory
+import com.jimenez.course.presentation.utils.extensionFuntion.customAlertDialog
 import com.jimenez.course.presentation.utils.extensionFuntion.presentShortSnackBar
 
 
@@ -55,6 +58,10 @@ class LoginFragment : BaseFragment(), ResultCallback<String> {
             getValidateLoginCallBack()
         }
 
+        fragmentLoginBinding?.infoImage?.setOnClickListener {
+            viewAlertDialog()
+        }
+
         /** conection entre el viewModel - (titleViewModel) y la vista - (titleView) */
 
         fragmentLoginBinding?.loginViewModel?.emailMLD?.observe(
@@ -64,6 +71,17 @@ class LoginFragment : BaseFragment(), ResultCallback<String> {
         )
 
         return fragmentLoginBinding?.root
+    }
+
+    // FIXME: 19/06/21 modificar textos 
+    private fun viewAlertDialog() {
+        activity?.customAlertDialog(
+            title = "Infomación",
+            message = "Para recuperar tu contraseña necesitaras conocer y tener acceso a tu correo electronico",
+            positive = "Aceptar",
+            processPositive = this::processAlert,
+            negative = "Cancelar"
+        )
     }
 
     /** action - validate login for manual - pair */
@@ -99,5 +117,8 @@ class LoginFragment : BaseFragment(), ResultCallback<String> {
         findNavController().navigate(R.id.action_loginFragment_to_homeFragment, bundle)
     }
 
+    fun processAlert() {
+        fragmentLoginBinding?.root?.presentShortSnackBar("message")
+    }
 
 }
