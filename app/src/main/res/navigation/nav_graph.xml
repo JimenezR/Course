@@ -23,7 +23,7 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.jimenez.course.presentation.home.HomeFragment"
+        android:name="com.jimenez.course.presentation.home.view.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" />
 

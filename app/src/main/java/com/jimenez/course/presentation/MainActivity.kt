@@ -1,6 +1,5 @@
 package com.jimenez.course.presentation
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.jimenez.course.R
 import com.jimenez.course.presentation.core.base.BaseActivity
