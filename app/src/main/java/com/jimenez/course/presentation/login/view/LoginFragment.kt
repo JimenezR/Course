@@ -18,6 +18,7 @@ import com.jimenez.course.presentation.core.callbacks.ResultCallback
 import com.jimenez.course.presentation.login.viewModel.LoginViewModel
 import com.jimenez.course.presentation.login.viewModel.LoginViewModelFactory
 import com.jimenez.course.presentation.utils.extensionFuntion.customAlertDialog
+import com.jimenez.course.presentation.utils.extensionFuntion.customAlertDialogView
 import com.jimenez.course.presentation.utils.extensionFuntion.presentShortSnackBar
 
 
@@ -62,6 +63,10 @@ class LoginFragment : BaseFragment(), ResultCallback<String> {
             viewAlertDialog()
         }
 
+        fragmentLoginBinding?.recoverPassword?.setOnClickListener {
+            customAlertDialog()
+        }
+
         /** conection entre el viewModel - (titleViewModel) y la vista - (titleView) */
 
         fragmentLoginBinding?.loginViewModel?.emailMLD?.observe(
@@ -73,10 +78,21 @@ class LoginFragment : BaseFragment(), ResultCallback<String> {
         return fragmentLoginBinding?.root
     }
 
+    private fun customAlertDialog() {
+        activity?.customAlertDialogView(
+            title = "CustomAlertDialogView",
+            message = "Utilizados para crear un aviso de tipo informativo, preventivo o de un evento inesperado en nuestra aplicación. Tenemos disponibles estas alertas.",
+            positive = "Aceptar",
+            processPositive = this::processAlert,
+            negative = "Cancelar",
+            neutral = "Nada"
+        )
+    }
+
     // FIXME: 19/06/21 modificar textos 
     private fun viewAlertDialog() {
         activity?.customAlertDialog(
-            title = "Infomación",
+            title = "CustomAlertDialog",
             message = "Para recuperar tu contraseña necesitaras conocer y tener acceso a tu correo electronico",
             positive = "Aceptar",
             processPositive = this::processAlert,
