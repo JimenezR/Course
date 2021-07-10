@@ -10,4 +10,17 @@
     <color name="colorNegative">#FF5722</color>
     <color name="colorPositive">#4CAF50</color>
     <color name="neutralPositive">#434343</color>
+
+
+    <color name="red">#F93D15</color>
+    <color name="amarillo">#F9CB15</color>
+    <color name="azul">#1572F9</color>
+    <color name="rosa">#F915F3</color>
+    <color name="negro">#000000</color>
+    <color name="blanco">#F3F3F3</color>
+    <color name="gris">#595959</color>
+
+
+
+
 </resources>

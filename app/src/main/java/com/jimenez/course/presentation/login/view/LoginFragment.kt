@@ -1,12 +1,9 @@
 package com.jimenez.course.presentation.login.view
 
-import android.app.AlertDialog
-import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
@@ -26,11 +23,6 @@ class LoginFragment : BaseFragment(), ResultCallback<String> {
 
     private var fragmentLoginBinding: FragmentLoginBinding? = null
     private var email = ""
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -104,7 +96,7 @@ class LoginFragment : BaseFragment(), ResultCallback<String> {
     private fun getValidateLogin() {
         fragmentLoginBinding?.loginViewModel?.validateLoginPair()?.let { pair ->
             fragmentLoginBinding?.root?.presentShortSnackBar(pair.second)
-            if (pair.first){
+            if (pair.first) {
                 navigateToHomeFragment()
             }
         }
@@ -133,7 +125,7 @@ class LoginFragment : BaseFragment(), ResultCallback<String> {
         findNavController().navigate(R.id.action_loginFragment_to_homeFragment, bundle)
     }
 
-    fun processAlert() {
+    private fun processAlert() {
         fragmentLoginBinding?.root?.presentShortSnackBar("message")
     }
 
