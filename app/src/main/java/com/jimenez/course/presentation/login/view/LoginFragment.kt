@@ -9,6 +9,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.jimenez.course.R
+import com.jimenez.course.data.local.database.CourseRoomDataBase
 import com.jimenez.course.databinding.FragmentLoginBinding
 import com.jimenez.course.presentation.core.base.BaseFragment
 import com.jimenez.course.presentation.core.callbacks.ResultCallback
@@ -40,7 +41,8 @@ class LoginFragment : BaseFragment(), ResultCallback<String> {
         fragmentLoginBinding?.loginViewModel =
             ViewModelProvider(
                 this, LoginViewModelFactory(
-                    this
+                    this,
+                    CourseRoomDataBase.getDataBase(requireContext())
                 )
             ).get(LoginViewModel::class.java)
 

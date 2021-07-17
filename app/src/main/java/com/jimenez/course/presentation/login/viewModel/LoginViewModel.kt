@@ -1,11 +1,17 @@
 package com.jimenez.course.presentation.login.viewModel
 
 import androidx.lifecycle.MutableLiveData
+import com.jimenez.course.data.local.database.CourseRoomDataBase
+import com.jimenez.course.data.local.entites.User
+import com.jimenez.course.data.local.repositories.UserRepository
 import com.jimenez.course.presentation.core.base.BaseViewModel
 import com.jimenez.course.presentation.core.callbacks.ResultCallback
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class LoginViewModel(
-    private val resultCallback: ResultCallback<String>
+    private val resultCallback: ResultCallback<String>,
+    private val courseRoomDataBase: CourseRoomDataBase
 ) : BaseViewModel() {
 
     val emailMLD = MutableLiveData<String>()
@@ -13,7 +19,12 @@ class LoginViewModel(
     var mail = ""
     var password = ""
 
+    var userRepository = UserRepository(courseRoomDataBase.userDao())
+
     init {
+
+        setUser()
+
         emailMLD.observeForever {
             mail = it
         }
@@ -21,6 +32,17 @@ class LoginViewModel(
         passwordMLD.observeForever {
             password = it
         }
+    }
+
+    /** prueba */
+    private fun setUser() = GlobalScope.launch {
+        userRepository.insertUser(
+            User(
+                firstName = "Usuario Principal",
+                email = "user@mail.com",
+                password = "1234"
+            )
+        )
     }
 
     fun validateLoginPair(): Pair<Boolean, String> {
@@ -60,8 +82,8 @@ class LoginViewModel(
 
     /** Validaciones a servidor(WS) o DB(ROOM) */
 
-    private fun validateEmail(): Boolean = mail == "mail@mail.com"
+    private fun validateEmail(): Boolean = mail == ""
 
-    private fun validatePassword(): Boolean = password == "1234"
+    private fun validatePassword(): Boolean = password == ""
 
 }
