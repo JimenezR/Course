@@ -19,6 +19,14 @@
             app:popEnterAnim="@anim/enter_from_left"
             app:popExitAnim="@anim/exit_from_left"/>
 
+        <action
+            android:id="@+id/action_loginFragment_to_registerFragment"
+            app:destination="@id/registerFragment"
+            app:enterAnim="@anim/enter_from_right"
+            app:exitAnim="@anim/exit_from_right"
+            app:popEnterAnim="@anim/enter_from_left"
+            app:popExitAnim="@anim/exit_from_left" />
+
     </fragment>
 
     <fragment
@@ -26,6 +34,12 @@
         android:name="com.jimenez.course.presentation.home.view.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="com.jimenez.course.presentation.register.view.RegisterFragment"
+        android:label="RegisterFragment"
+        tools:layout="@layout/fragment_register" />
 
 
 </navigation>

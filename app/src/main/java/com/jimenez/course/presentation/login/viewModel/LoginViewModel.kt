@@ -6,24 +6,23 @@ import com.jimenez.course.data.local.entites.User
 import com.jimenez.course.data.local.repositories.UserRepository
 import com.jimenez.course.presentation.core.base.BaseViewModel
 import com.jimenez.course.presentation.core.callbacks.ResultCallback
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import kotlin.math.log
 
 class LoginViewModel(
     private val resultCallback: ResultCallback<String>,
-    private val courseRoomDataBase: CourseRoomDataBase
+    courseRoomDataBase: CourseRoomDataBase
 ) : BaseViewModel() {
 
     val emailMLD = MutableLiveData<String>()
     val passwordMLD = MutableLiveData<String>()
+    val navigateToRegisterMLD = MutableLiveData(false)
     var mail = ""
     var password = ""
 
     var userRepository = UserRepository(courseRoomDataBase.userDao())
 
     init {
-
-        setUser()
 
         emailMLD.observeForever {
             mail = it
@@ -32,17 +31,6 @@ class LoginViewModel(
         passwordMLD.observeForever {
             password = it
         }
-    }
-
-    /** prueba */
-    private fun setUser() = GlobalScope.launch {
-        userRepository.insertUser(
-            User(
-                firstName = "Usuario Principal",
-                email = "user@mail.com",
-                password = "1234"
-            )
-        )
     }
 
     fun validateLoginPair(): Pair<Boolean, String> {
@@ -69,7 +57,8 @@ class LoginViewModel(
     }
 
     fun validateLoginCallBack() {
-        if (validateEmail() && validatePassword()) {
+        /** validación en duro */
+        /*if (validateEmail() && validatePassword()) {
             resultCallback.onSuccess("Bienvenido: $mail")
         } else if (!validateEmail() && !validatePassword()) {
             resultCallback.onError("Tu email y password son incorrectos")
@@ -77,13 +66,40 @@ class LoginViewModel(
             resultCallback.onError("Tu email es incorrecto")
         } else if (!validatePassword()) {
             resultCallback.onError("Tu password es incorrecto")
+        }*/
+        getLogin()
+    }
+
+    /** Validación a la DB */
+    private fun getLogin() {
+        job = CoroutineScope(Dispatchers.IO).launch {
+            val user = userRepository.getLogin(email = mail, password = password)
+            withContext(Dispatchers.Main) {
+                if (user != null) {
+                    resultCallback.onSuccess("Bienvenido: ${user.firstName}")
+                } else {
+                    resultCallback.onError("Tu email y password o incorrectos")
+                }
+            }
         }
     }
 
     /** Validaciones a servidor(WS) o DB(ROOM) */
-
-    private fun validateEmail(): Boolean = mail == ""
+    private fun validateEmail(): Boolean {
+        var login = false
+        job = CoroutineScope(Dispatchers.IO).launch {
+            val user = userRepository.getEmail(email = mail)
+            withContext(Dispatchers.Main) {
+                login = user == null
+            }
+        }
+        return login
+    }
 
     private fun validatePassword(): Boolean = password == ""
+
+    fun navigateToRegister() {
+        navigateToRegisterMLD.postValue(true)
+    }
 
 }

@@ -46,6 +46,12 @@ class LoginFragment : BaseFragment(), ResultCallback<String> {
                 )
             ).get(LoginViewModel::class.java)
 
+        return fragmentLoginBinding?.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         fragmentLoginBinding?.btnLogin?.setOnClickListener {
             /** action - validate login for manual - pair */
             //getValidateLogin()
@@ -69,7 +75,14 @@ class LoginFragment : BaseFragment(), ResultCallback<String> {
             }
         )
 
-        return fragmentLoginBinding?.root
+        fragmentLoginBinding?.loginViewModel?.navigateToRegisterMLD?.observe(
+            viewLifecycleOwner, {
+                if (it) {
+                    navigateToRegisterFragment()
+                    fragmentLoginBinding?.loginViewModel?.navigateToRegisterMLD?.postValue(false)
+                }
+            }
+        )
     }
 
     private fun customAlertDialog() {
@@ -125,6 +138,10 @@ class LoginFragment : BaseFragment(), ResultCallback<String> {
             "welcome" to "Bienvenido"
         )
         findNavController().navigate(R.id.action_loginFragment_to_homeFragment, bundle)
+    }
+
+    private fun navigateToRegisterFragment() {
+        findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
     }
 
     private fun processAlert() {
