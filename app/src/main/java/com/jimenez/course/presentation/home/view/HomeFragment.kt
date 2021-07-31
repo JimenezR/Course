@@ -4,22 +4,22 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.GridLayout
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.jimenez.course.R
+import com.jimenez.course.data.local.database.CourseRoomDataBase
+import com.jimenez.course.data.network.repositories.MoviesPopularNetworkRepository
 import com.jimenez.course.databinding.FragmentHomeBinding
+import com.jimenez.course.domain.interactors.MoviesPopularInteractor
 import com.jimenez.course.presentation.core.base.BaseFragment
 import com.jimenez.course.presentation.core.callbacks.OnItemClickListener
 import com.jimenez.course.presentation.home.adapters.ColorAdapter
 import com.jimenez.course.presentation.home.model.Color
 import com.jimenez.course.presentation.home.viewModel.HomeViewModel
+import com.jimenez.course.presentation.home.viewModel.HomeViewModelFactory
 import com.jimenez.course.presentation.utils.extensionFuntion.customAlertDialog
-import com.jimenez.course.presentation.utils.extensionFuntion.presentShortSnackBar
 
 class HomeFragment : BaseFragment(), OnItemClickListener<Color> {
 
@@ -54,7 +54,11 @@ class HomeFragment : BaseFragment(), OnItemClickListener<Color> {
 
         fragmentHomeBinding?.homeViewModel =
             ViewModelProvider(
-                this
+                this,
+                HomeViewModelFactory(
+                    MoviesPopularInteractor(MoviesPopularNetworkRepository()),
+                    CourseRoomDataBase.getDataBase(requireContext())
+                )
             ).get(HomeViewModel::class.java)
 
         return fragmentHomeBinding?.root
@@ -63,7 +67,7 @@ class HomeFragment : BaseFragment(), OnItemClickListener<Color> {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        fragmentHomeBinding?.homeViewModel?.colorList?.observe(viewLifecycleOwner, { colors ->
+        fragmentHomeBinding?.homeViewModel?.colorListMLD?.observe(viewLifecycleOwner, { colors ->
             if (colors.isNotEmpty()) {
                 fragmentHomeBinding?.rvColors?.apply {
                     layoutManager = GridLayoutManager(context, 3)
